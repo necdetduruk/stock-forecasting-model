@@ -46,17 +46,17 @@ class ForecastPredictor:
         print("STATUS: Best model loaded successfully.")
 
     def load_historical_data(self):
-        """Load the historical data CSV for the stock."""
+        """Load the historical data-collection CSV for the stock."""
         data_filename = f"{self.stock_ticker}_historical_data.csv"
-        print(f"STATUS: Loading historical data from '{data_filename}'...")
+        print(f"STATUS: Loading historical data-collection from '{data_filename}'...")
         if not os.path.exists(data_filename):
-            raise FileNotFoundError(f"Historical data file '{data_filename}' not found.")
+            raise FileNotFoundError(f"Historical data-collection file '{data_filename}' not found.")
         df = pd.read_csv(data_filename, parse_dates=['Date'], index_col='Date')
         # Ensure the index is timezone-naive
         df.index = pd.to_datetime(df.index, utc=True).tz_convert(None)
         self.historical_data = df
-        logging.info(f"Loaded historical data with {len(df)} records.")
-        print("STATUS: Historical data loaded successfully.")
+        logging.info(f"Loaded historical data-collection with {len(df)} records.")
+        print("STATUS: Historical data-collection loaded successfully.")
 
     @staticmethod
     def compute_features(df):
@@ -185,7 +185,7 @@ class ForecastPredictor:
 
     def compute_past_predictions(self):
         """
-        Compute in-sample predictions on the historical data using the best model.
+        Compute in-sample predictions on the historical data-collection using the best model.
         Only use rows where all required features are available.
         """
         print("STATUS: Computing past in-sample predictions...")
@@ -212,7 +212,7 @@ class ForecastPredictor:
         """
         print("STATUS: Plotting forecast results...")
         plt.figure(figsize=(12, 6))
-        # Plot historical actual data
+        # Plot historical actual data-collection
         plt.plot(self.historical_data.index, self.historical_data['Close'],
                  label="Actual Historical", color='blue')
         # Plot in-sample past predictions
@@ -249,14 +249,14 @@ def main():
         predictor.load_best_model()
         predictor.load_historical_data()
         past_predictions = predictor.compute_past_predictions()
-        # forecast start is the last date of the historical data
+        # forecast start is the last date of the historical data-collection
         forecast_start_date = predictor.historical_data.index[-1]
         predictor.forecast()  # Perform the iterative forecast
         # Save forecast DataFrame as CSV
         forecast_filename = f"{predictor.stock_ticker}_{predictor.forecast_days}_forecast.csv"
         predictor.forecast_df.to_csv(forecast_filename)
-        print(f"STATUS: forecast data saved as '{forecast_filename}'.")
-        logging.info(f"forecast data saved as '{forecast_filename}'.")
+        print(f"STATUS: forecast data-collection saved as '{forecast_filename}'.")
+        logging.info(f"forecast data-collection saved as '{forecast_filename}'.")
         predictor.plot_forecast(past_predictions, forecast_start_date)
         print("STATUS: forecast completed successfully.")
     except Exception as e:

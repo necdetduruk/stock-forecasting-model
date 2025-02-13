@@ -10,7 +10,7 @@ from sklearn.model_selection import TimeSeriesSplit, RandomizedSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.preprocessing import RobustScaler  # Robust scaling for outlier-prone data
+from sklearn.preprocessing import RobustScaler  # Robust scaling for outlier-prone data-collection
 
 # Configure logging
 logging.basicConfig(
@@ -26,15 +26,15 @@ class HybridStockPredictor:
         self.data = None
         self.rf_model = None
         self.xgb_model = None
-        self.remove_outliers = True  # Set to True to remove outliers from training data
+        self.remove_outliers = True  # Set to True to remove outliers from training data-collection
 
     def load_data(self):
-        """Loads historical stock data from a CSV file."""
+        """Loads historical stock data-collection from a CSV file."""
         try:
-            print(f"📥 Loading data for {self.stock_ticker}...")
+            print(f"📥 Loading data-collection for {self.stock_ticker}...")
             file_path = f"{self.stock_ticker}_historical_data.csv"
             if not os.path.exists(file_path):
-                raise FileNotFoundError(f"⚠️ File '{file_path}' not found. Please provide valid stock data.")
+                raise FileNotFoundError(f"⚠️ File '{file_path}' not found. Please provide valid stock data-collection.")
 
             # Read the CSV with 'Date' parsed as dates and set as index
             df = pd.read_csv(file_path, parse_dates=['Date'], index_col='Date')
@@ -50,7 +50,7 @@ class HybridStockPredictor:
             print(f"✅ Loaded {len(df)} records for {self.stock_ticker}.\n")
             logging.info(f"Loaded {len(df)} records for {self.stock_ticker}.")
         except Exception as e:
-            logging.error(f"Error loading data: {e}")
+            logging.error(f"Error loading data-collection: {e}")
             raise
 
     def add_technical_indicators(self):
@@ -88,9 +88,9 @@ class HybridStockPredictor:
             raise
 
     def prepare_data(self):
-        """Splits data into features and target."""
+        """Splits data-collection into features and target."""
         try:
-            print("📆 Preparing data...")
+            print("📆 Preparing data-collection...")
             self.add_technical_indicators()
             # Updated feature list including new indicators
             features = ['SMA_10', 'SMA_50', 'Momentum', 'Volatility',
@@ -99,11 +99,11 @@ class HybridStockPredictor:
             y = self.data['Close']
             return X, y
         except Exception as e:
-            logging.error(f"Error preparing data: {e}")
+            logging.error(f"Error preparing data-collection: {e}")
             raise
 
     def remove_outliers_fn(self, X, y, threshold=3):
-        """Removes outliers from training data based on the target variable."""
+        """Removes outliers from training data-collection based on the target variable."""
         mean_y = y.mean()
         std_y = y.std()
         mask = (np.abs(y - mean_y) <= threshold * std_y)
@@ -203,7 +203,7 @@ class HybridStockPredictor:
                 logging.info(f"Fold {fold} - y_train: mean={y_train.mean():.2f}, std={y_train.std():.2f}; "
                              f"y_test: mean={y_test.mean():.2f}, std={y_test.std():.2f}")
 
-                # Optionally remove outliers from training data
+                # Optionally remove outliers from training data-collection
                 if self.remove_outliers:
                     X_train, y_train = self.remove_outliers_fn(X_train, y_train)
                     print(f"Fold {fold} - After outlier removal: y_train: mean={y_train.mean():.2f}, std={y_train.std():.2f}")
@@ -255,7 +255,7 @@ class HybridStockPredictor:
                         "w_xgb": w_xgb_norm,
                         "scaler": scaler
                     }
-                # Save the last fold's data for plotting
+                # Save the last fold's data-collection for plotting
                 last_X_test = X_test
                 last_y_test = y_test
                 last_hybrid_preds = hybrid_preds
