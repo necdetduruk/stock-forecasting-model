@@ -29,7 +29,7 @@ custom_bd = CustomBusinessDay(holidays=list(us_holidays))
 class ForecastPredictor:
     def __init__(self, stock_ticker, forecast_days):
         self.stock_ticker = stock_ticker.upper()
-        self.forecast_days = forecast_days  # Forecast horizon in business days
+        self.forecast_days = forecast_days  # forecast horizon in business days
         self.best_model = None  # Dictionary loaded from pickle
         self.historical_data = None  # DataFrame loaded from CSV
         self.forecast_df = None  # DataFrame after iterative forecasting
@@ -221,7 +221,7 @@ class ForecastPredictor:
         # Plot future forecast (rows after the last historical date)
         forecast_data = self.forecast_df[self.forecast_df.index > forecast_start_date]
         plt.plot(forecast_data.index, forecast_data['Close'],
-                 label="Future Forecast", linestyle='--', color='red')
+                 label="Future forecast", linestyle='--', color='red')
         # Plot prediction intervals for future forecast
         plt.fill_between(forecast_data.index,
                          forecast_data['Forecast_lower'],
@@ -229,16 +229,16 @@ class ForecastPredictor:
                          color='red', alpha=0.3,
                          label='95% Prediction Interval')
         # Draw a vertical line at the forecast start
-        plt.axvline(x=forecast_start_date, color='green', linestyle=':', label="Forecast Start")
+        plt.axvline(x=forecast_start_date, color='green', linestyle=':', label="forecast Start")
         plt.xlabel("Date")
         plt.ylabel("Stock Close Price")
-        plt.title(f"{self.stock_ticker} Forecast")
+        plt.title(f"{self.stock_ticker} forecast")
         plt.legend()
         plot_filename = f"{self.stock_ticker}_forecast.png"
         plt.savefig(plot_filename)
         plt.show()
-        logging.info(f"Forecast plot saved as {plot_filename}")
-        print(f"STATUS: Forecast plot saved as '{plot_filename}'.")
+        logging.info(f"forecast plot saved as {plot_filename}")
+        print(f"STATUS: forecast plot saved as '{plot_filename}'.")
 
 def main():
     try:
@@ -249,16 +249,16 @@ def main():
         predictor.load_best_model()
         predictor.load_historical_data()
         past_predictions = predictor.compute_past_predictions()
-        # Forecast start is the last date of the historical data
+        # forecast start is the last date of the historical data
         forecast_start_date = predictor.historical_data.index[-1]
         predictor.forecast()  # Perform the iterative forecast
         # Save forecast DataFrame as CSV
         forecast_filename = f"{predictor.stock_ticker}_{predictor.forecast_days}_forecast.csv"
         predictor.forecast_df.to_csv(forecast_filename)
-        print(f"STATUS: Forecast data saved as '{forecast_filename}'.")
-        logging.info(f"Forecast data saved as '{forecast_filename}'.")
+        print(f"STATUS: forecast data saved as '{forecast_filename}'.")
+        logging.info(f"forecast data saved as '{forecast_filename}'.")
         predictor.plot_forecast(past_predictions, forecast_start_date)
-        print("STATUS: Forecast completed successfully.")
+        print("STATUS: forecast completed successfully.")
     except Exception as e:
         print(f"An error occurred: {e}")
         logging.error(f"Error in main: {e}")
